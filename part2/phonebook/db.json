@@ -21,9 +21,14 @@
       "id": "4"
     },
     {
-      "id": 5,
+      "id": "5",
       "name": "Mario Bros",
       "number": "555555"
+    },
+    {
+      "id": 6,
+      "name": "Mario Draghi",
+      "number": "9999999"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
