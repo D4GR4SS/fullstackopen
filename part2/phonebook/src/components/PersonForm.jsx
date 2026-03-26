@@ -5,16 +5,21 @@ const PersonForm = ({
   onNumberChange,
   newNumber,
 }) => {
+  const flexStyle = {
+    display: 'flex',
+    gap: '20px',
+  };
+
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={onSubmit} style={flexStyle}>
       <div>
-        name: <input type="text" value={newName} onChange={onNameChange} />
+        name: <input type='text' value={newName} onChange={onNameChange} />
       </div>
       <div>
-        number: <input type="tel" value={newNumber} onChange={onNumberChange} />
+        number: <input type='tel' value={newNumber} onChange={onNumberChange} />
       </div>
       <div>
-        <button type="submit">add</button>
+        <button type='submit'>add</button>
       </div>
     </form>
   );

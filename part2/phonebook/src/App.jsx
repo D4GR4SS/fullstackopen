@@ -12,6 +12,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('');
   const [filter, setFilter] = useState('');
   const [message, setMessage] = useState(null);
+  const [messageType, setMessageType] = useState(null);
 
   useEffect(() => {
     personService.getAll().then((response) => {
@@ -43,6 +44,7 @@ const App = () => {
               ),
             );
             setMessage(`Updated ${newName}'s number`);
+            setMessageType('success');
             setTimeout(() => {
               setMessage(null);
             }, 4000);
@@ -62,6 +64,7 @@ const App = () => {
     personService.create(newObject).then((response) => {
       setPersons(persons.concat(response.data));
       setMessage(`Added ${newName}`);
+      setMessageType('success');
       setTimeout(() => {
         setMessage(null);
       }, 4000);
@@ -72,9 +75,28 @@ const App = () => {
 
   const deletePerson = (id, name) => {
     if (window.confirm(`Delete ${name}?`)) {
-      personService.remove(id).then(() => {
-        setPersons(persons.filter((person) => person.id !== id));
-      });
+      personService
+        .remove(id)
+        .then(() => {
+          setPersons(persons.filter((person) => person.id !== id));
+          setMessage(`Deleted ${name}`);
+          setMessageType('success');
+          setTimeout(() => {
+            setMessage(null);
+            setMessageType(null);
+          }, 4000);
+        })
+        .catch(() => {
+          setMessage(
+            `Information of ${name} has already been removed from the server`,
+          );
+          setMessageType('error');
+          setTimeout(() => {
+            setMessage(null);
+            setMessageType(null);
+          }, 4000);
+          setPersons(persons.filter((person) => person.id !== id));
+        });
     }
   };
 
@@ -93,7 +115,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={message} />
+      <Notification message={message} type={messageType} />
 
       <Filter filter={filter} onChange={handleFilterChange} />
 
