@@ -20,15 +20,30 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault();
 
-    if (
-      persons.some(
-        (person) => person.name.toLowerCase() === newName.toLowerCase(),
-      )
-    ) {
-      alert(`${newName} is already added to phonebook`);
-      setNewName('');
-      setNewNumber('');
+    const existingObject = persons.find(
+      (p) => p.name.toLowerCase() === newName.toLowerCase(),
+    );
 
+    if (existingObject) {
+      if (
+        window.confirm(
+          `${newName} is already added to phonebook, replace the old number with a new one?`,
+        )
+      ) {
+        const updatedObject = { ...existingObject, number: newNumber };
+
+        personService
+          .update(existingObject.id, updatedObject)
+          .then((response) => {
+            setPersons(
+              persons.map((p) =>
+                p.id !== existingObject.id ? p : response.data,
+              ),
+            );
+            setNewName('');
+            setNewNumber('');
+          });
+      }
       return;
     }
 
