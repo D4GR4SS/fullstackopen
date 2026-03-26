@@ -1,0 +1,9 @@
+.message {
+  color: #20ac20;
+  background: #f0efef;
+  font-size: 20px;
+  border: solid 2px;
+  border-style: solid #20ac20;
+  padding: 10px;
+  margin-bottom: 10px;
+}
