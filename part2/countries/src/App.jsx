@@ -1,9 +1,12 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
-const CountryList = ({ countries }) => {
+const CountryList = ({ countries, onSelect }) => {
   return countries.map((country) => (
-    <p key={country.cca2}>{country.name.common}</p>
+    <div key={country.cca2}>
+      {country.name.common}
+      <button onClick={() => onSelect(country)}>Show</button>
+    </div>
   ));
 };
 
@@ -26,8 +29,9 @@ const CountryDetails = ({ country }) => {
 };
 
 function App() {
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState('');
   const [countries, setCountries] = useState([]);
+  const [showDetails, setShowDetails] = useState(null);
 
   useEffect(() => {
     axios
@@ -43,19 +47,24 @@ function App() {
 
   const handleChange = (event) => {
     setQuery(event.target.value);
+    setShowDetails(null);
   };
 
   return (
     <>
-      {" "}
       <form>
-        find countries <input query={query} onChange={handleChange} />
+        find countries <input value={query} onChange={handleChange} />
       </form>
       <div>
-        {matchingCountries.length > 10 ? (
+        {showDetails ? (
+          <CountryDetails country={showDetails} />
+        ) : matchingCountries.length > 10 ? (
           <p>Too many matches, specify another filter</p>
         ) : matchingCountries.length > 1 ? (
-          <CountryList countries={matchingCountries} />
+          <CountryList
+            countries={matchingCountries}
+            onSelect={setShowDetails}
+          />
         ) : matchingCountries.length === 1 ? (
           <CountryDetails country={matchingCountries[0]} />
         ) : (
